@@ -14,7 +14,7 @@ function a(){console.log(2)};
 var a  = function(){console.log(1)};
 a()
 ```
-![](./images/memory-2.png)
+![](./images/memory-3.png)
 先定义后执行，先去栈查找
 ```js
 a(); function a(){console.log(666)}//666
