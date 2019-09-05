@@ -20,9 +20,9 @@ indexOf()方法返回在该数组中第一个找到的元素位置，如果它�
 var arr = ['apple','orange','pear'],
     found = false;
 for(var i= 0, l = arr.length; i< l; i++){
-    if(arr[i] === 'orange'){
-        found = true;
-    }
+  if(arr[i] === 'orange'){
+    found = true;
+  }
 }
 console.log("found:",found);
 ```
@@ -46,7 +46,7 @@ var ary = [12,23,24,42,1];
 var result = function(){
   for (var i = 0; i < ary.length; i++) {
     if(ary[i] < 0){
-       return false;
+      return false;
     }
   }
   return true; //需全部满足
@@ -73,7 +73,7 @@ var ary = [12,23,-24,42,1];
 var result = function(){
   for (var i = 0; i < ary.length; i++) {
     if(ary[i] < 0){
-       return true;
+      return true;
     }
   }
   return false; //只需满足一个
