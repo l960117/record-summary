@@ -66,3 +66,6 @@ function() {
 使用了内存之后， 如果后面他们不会再被用到，但是还没有及时释放，这就叫做内存泄露（memory leak）。如果出现了内存泄露，那么有可能使得内存越来越大，而导致浏览器崩溃。
 
 请转：https://github.com/950905/record-summary/blob/master/optimization/%E5%BC%80%E5%8F%91%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2.md
+
+## 其他
+以内存为基础，一步一步的理解JavaScript的执行上下文，作用域链，闭包，原型链等。
