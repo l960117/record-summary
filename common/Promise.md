@@ -146,11 +146,47 @@ p1.then(
   }
 );
 ```
-输出结果
 
+```js
+var p2 = new Promise(function(resolve,reject){
+  resolve( 2 );	
+});
+
+p2.then(
+  function(value){
+    console.log('p2 then value: ' + value);
+    foo.bar();
+  }, 
+  function(err){
+    console.log('p2 then err: ' + err);
+  }
+).then(
+  function(value){
+    console.log('p2 then then value: ' + value);
+  },
+  function(err){
+    console.log('p2 then then err: ' + err);
+    return 1;
+  }
+).then(
+  function(value){
+    console.log('p2 then then then value: ' + value);
+  },
+  function(err){
+    console.log('p2 then then then err: ' + err);
+  }
+);
+```
 p1 then err: ReferenceError: foo is not defined
 
+p2 then value: 2
+
 p1 then then value: undefined
+
+p2 then then err: ReferenceError: foo is not defined
+
+p2 then then then value: 1
+Promise中的异常由then参数中第二个回调函数（Promise执行失败的回调）处理，异常信息将作为Promise的值。异常一旦得到处理，then返回的后续Promise对象将恢复正常，并会被Promise执行成功的回调函数处理。另外，需要注意p1、p2 多级then的回调函数是交替执行的 ，这正是由Promise then回调的异步性决定的。
 
 then()方法使Promise原型链上的方法，它包含两个参数方法，分别是已成功resolved的回调和已失败rejected的回调
 
