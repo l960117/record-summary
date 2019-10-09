@@ -2,9 +2,11 @@
 ES6 原生提供了 Promise 对象。
 
 所谓 Promise，就是一个对象，用来传递异步操作的消息。它代表了某个未来才会知道结果的事件（通常是一个异步操作），并且这个事件提供统一的 API，可供进一步处理。
+Promise是异步编程的一种解决方案
 
 ## 基本API
 基本的 api
+
 Promise.resolve()
 
 Promise.reject()
@@ -16,6 +18,7 @@ Promise.prototype.catch()
 Promise.all() // 所有的完成
 
 var p = Promise.all([p1,p2,p3]);
+
 Promise.race() // 竞速，完成一个即可
 
 ## 三种状态
@@ -114,6 +117,12 @@ undefined
 
 "reject: reject"
 
+Promise对象的then方法返回一个新的Promise对象，因此可以通过链式调用then方法。then方法接收两个函数作为参数，第一个参数是Promise执行成功时的回调，第二个参数是Promise执行失败时的回调。两个函数只会有一个被调用，函数的返回值将被用作创建then返回的Promise对象。这两个参数的返回值可以是以下三种情况中的一种：
+
+return 一个同步的值 ，或者 undefined（当没有返回一个有效值时，默认返回undefined），then方法将返回一个resolved状态的Promise对象，Promise对象的值就是这个返回值。
+return 另一个 Promise，then方法将根据这个Promise的状态和值创建一个新的Promise对象返回。
+throw 一个同步异常，then方法将返回一个rejected状态的Promise,  值是该异常。
+
 ## 异常
 ```js
 var p1 = new Promise( function(resolve,reject){
@@ -136,143 +145,59 @@ p1.then(
     console.log('p1 then then err: ' + err);
   }
 );
-
-var p2 = new Promise(function(resolve,reject){
-  resolve( 2 );	
-});
-
-p2.then(
-  function(value){
-    console.log('p2 then value: ' + value);
-    foo.bar();
-  }, 
-  function(err){
-    console.log('p2 then err: ' + err);
-  }
-).then(
-  function(value){
-    console.log('p2 then then value: ' + value);
-  },
-  function(err){
-    console.log('p2 then then err: ' + err);
-    return 1;
-  }
-).then(
-  function(value){
-    console.log('p2 then then then value: ' + value);
-  },
-  function(err){
-    console.log('p2 then then then err: ' + err);
-  }
-);
 ```
 输出结果
 
 p1 then err: ReferenceError: foo is not defined
 
-p2 then value: 2
-
 p1 then then value: undefined
 
-p2 then then err: ReferenceError: foo is not defined
+then()方法使Promise原型链上的方法，它包含两个参数方法，分别是已成功resolved的回调和已失败rejected的回调
 
-p2 then then then value: 1
+.catch()的作用是捕获Promise的错误，与then()的rejected回调作用几乎一致。但是由于Promise的抛错具有冒泡性质，能够不断传递，这样就能够在下一个catch()中统一处理这些错误。同时catch()也能够捕获then()中抛出的错误，所以建议不要使用then()的rejected回调，而是统一使用catch()来处理错误
 
-Promise中的异常由then参数中第二个回调函数（Promise执行失败的回调）处理，异常信息将作为Promise的值。异常一旦得到处理，then返回的后续Promise对象将恢复正常，并会被Promise执行成功的回调函数处理。另外，需要注意p1、p2 多级then的回调函数是交替执行的 ，这正是由Promise then回调的异步性决定的。
+同样，catch()中也可以抛出错误，由于抛出的错误会在下一个catch中被捕获处理，因此可以再添加catch()
 
-## Promise.resolve()
+使用rejects()方法改变状态和抛出错误 throw new Error() 的作用是相同的
+
+当状态已经改变为resolved后，即使抛出错误，也不会触发then()的错误回调或者catch()方法
+
+then() 和 catch() 都会返回一个新的Promise对象，可以链式调用
+
+## Promise.resolve() / Promise.reject()
+
+用来包装一个现有对象，将其转变为Promise对象，但Promise.resolve()会根据参数情况返回不同的Promise：
+
+参数是Promise：原样返回
+参数带有then方法：转换为Promise后立即执行then方法
+参数不带then方法、不是对象或没有参数：返回resolved状态的Promise
+
+Promise.reject()会直接返回rejected状态的Promise
+
+## Promise.all()
+参数为Promise对象数组，如果有不是Promise的对象，将会先通过上面的Promise.resolve()方法转换
 ```js
-var p1 = Promise.resolve( 1 );
-var p2 = Promise.resolve( p1 );
-var p3 = new Promise(function(resolve, reject){
-  resolve(1);
-});
-var p4 = new Promise(function(resolve, reject){
-  resolve(p1);
-});
-
-console.log(p1 === p2); 
-console.log(p1 === p3);
-console.log(p1 === p4);
-console.log(p3 === p4);
-
-p4.then(function(value){
-  console.log('p4=' + value);
-});
-
-p2.then(function(value){
-  console.log('p2=' + value);
-})
-
-p1.then(function(value){
-  console.log('p1=' + value);
-})
+var promise = Promise.all( [p1, p2, p3] )
+promise.then(
+    ...
+).catch(
+    ...
+)
 ```
-输出结果
+当p1、p2、p3的状态都变成resolved时，promise才会变成resolved，并调用then()的已完成回调，但只要有一个变成rejected状态，promise就会立刻变成rejected状态
 
-true
-
-false
-
-false
-
-false
-
-p2=1
-
-p1=1
-
-p4=1
-
-Promise.resolve(...)可以接收一个值或者是一个Promise对象作为参数。当参数是普通值时，它返回一个resolved状态的Promise对象，对象的值就是这个参数；当参数是一个Promise对象时，它直接返回这个Promise参数。因此，p1 === p2。但通过new的方式创建的Promise对象都是一个新的对象，因此后面的三个比较结果都是false
-## resolve vs reject
+## Promise.race()
 ```js
-var p1 = new Promise(function(resolve, reject){
-  resolve(Promise.resolve('resolve'));
-});
-
-var p2 = new Promise(function(resolve, reject){
-  resolve(Promise.reject('reject'));
-});
-
-var p3 = new Promise(function(resolve, reject){
-  reject(Promise.resolve('resolve'));
-});
-
-p1.then(
-  function fulfilled(value){
-    console.log('fulfilled: ' + value);
-  }, 
-  function rejected(err){
-    console.log('rejected: ' + err);
-  }
-);
-
-p2.then(
-  function fulfilled(value){
-    console.log('fulfilled: ' + value);
-  }, 
-  function rejected(err){
-    console.log('rejected: ' + err);
-  }
-);
-
-p3.then(
-  function fulfilled(value){
-    console.log('fulfilled: ' + value);
-  }, 
-  function rejected(err){
-    console.log('rejected: ' + err);
-  }
-);
+var promise = Promise.race( [p1, p2, p3] )
+promise.then(
+    ...
+).catch(
+    ...
+)
 ```
-输出结果
+“竞速”方法，参数与Promise.all()相同，不同的是，参数中的p1、p2、p3只要有一个改变状态，promise就会立刻变成相同的状态并执行对于的回调
 
-p3 rejected: [object Promise]
+## Promise.done() / Promise. finally()
+Promise.done() 的用法类似 .then() ，可以提供resolved和rejected方法，也可以不提供任何参数，它的主要作用是在回调链的尾端捕捉前面没有被 .catch() 捕捉到的错误
 
-p1 fulfilled: resolve
-
-p2 rejected: reject
-
-Promise回调函数中的第一个参数resolve，会对Promise执行"拆箱"动作。即当resolve的参数是一个Promise对象时，resolve会"拆箱"获取这个Promise对象的状态和值，但这个过程是异步的。p1"拆箱"后，获取到Promise对象的状态是resolved，因此fulfilled回调被执行；p2"拆箱"后，获取到Promise对象的状态是rejected，因此rejected回调被执行。但Promise回调函数中的第二个参数reject不具备”拆箱“的能力，reject的参数会直接传递给then方法中的rejected回调。因此，即使p3 reject接收了一个resolved状态的Promise，then方法中被调用的依然是rejected，并且参数就是reject接收到的Promise对象。
-
+Promise. finally() 接受一个方法作为参数，这个方法不管promise最终的状态是怎样，都一定会被执行
