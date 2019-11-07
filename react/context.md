@@ -15,6 +15,8 @@ Context 提供了一种方式，能够让数据在组件树中传递时不必一
 
 
 ## 实例
+
+### 类组件
 ```js
 //创建Context组件
 const ThemeContext = React.createContext({
@@ -72,9 +74,10 @@ function Button() {
         </button>
       )}
     </ThemeContext.Consumer>
-  );
+);
 }
 ```
+
 ## 使用多个context
 ```js
 import React, { createContext } from 'react';
@@ -204,6 +207,7 @@ contextType 只能在类组件中使用
 ## 警告
 注意：context类似于全局变量做法，会让组件失去独立性、复用起来更困难，不能滥用、但本身它一定有适合使用的场景，具体看情况使用
 
+## 引申
 ### Component和PureComponent
 React.PureComponent 与 React.Component 几乎完全相同，但 React.PureComponent 通过prop和state的浅对比来实现 shouldComponentUpate()。
 PureComponent 里面也有一个内置的shouldComponentUpate.还要有immutable 对数据的管理不然会有BUG
@@ -211,3 +215,69 @@ PureComponent 里面也有一个内置的shouldComponentUpate.还要有immutable
 如果React组件的 render() 函数在给定相同的props和state下渲染为相同的结果，在某些场景下你可以使用 React.PureComponent 来提升性能。
 
 React.PureComponent 的 shouldComponentUpdate() 只会对对象进行浅对比。如果对象包含复杂的数据结构，它可能会因深层的数据不一致而产生错误的否定判断(表现为对象深层的数据已改变视图却没有更新, 原文：false-negatives)。当你期望只拥有简单的props和state时，才去继承 PureComponent ，或者在你知道深层的数据结构已经发生改变时使用 forceUpate() 。或者，考虑使用 不可变对象 来促进嵌套数据的快速比较。
+
+
+### 无状态函数式组件
+#### 常规函数写法
+```js
+function Item(props) {
+  return (
+    <div className='item'>
+      {props.title}
+      <span
+        className='deleteItem'
+        onClick={props.remove(props.id)}
+      > x </span>
+    </div>
+  )
+}
+```
+#### 无生命周期方法
+函数式组件，有时也被称为无状态组件，没有任何生命周期方法，意味着每次上层组件树状态发生变更时它们都会重新渲染，这就是因为缺少 shouldComponentUpdate 方法导致的。这也同样意味着您不能定义某些基于组件挂载和卸载的行为。
+
+#### 没有 this 和 ref
+在函数式组件中既不能使用 this 关键字或访问到 ref。
+
+如果您将 context 定义为函数的一个 props
+
+```js
+function D(props, context) {
+  return (
+    <div>{this.context.user.name}</div>
+  );
+}
+
+D.contextTypes = {
+  user: React.PropTypes.object.isRequired
+}
+```
+
+#### 优势？
+通过将逻辑和数据处理与 UI 展示剥离开来，我们就可以避免在展示型组件中处理任何的状态。无状态函数式组件强制实施了这样的风格，因为您无论如何都没有办法处理本地状态了。它强制您将任何的状态处理移交至上层的组件树，而让下层的组件只做它们所做的——关注 UI 的展示。
+
+容器型组件 (container component)：
+
+1、主要关注组件数据如何交互
+
+2、拥有自身的state，从服务器获取数据，或与redux等其他数据处理模块协作
+
+3、需要通过类定义组件声明，并包含生命周期函数和其他附加方法
+
+展示型组件 (presentational component)：
+
+1、主要负责组件内容如何展示
+
+2、从props接收父组件传递来的数据
+
+3、大多数情况可以通过函数定义组件声明
+
+
+没有逻辑意味着相同的表示具有相同的数据。
+1、解耦了界面和数据的逻辑
+
+2、更好的可复用性，比如同一个回复列表展示组件可以套用不同数据源的容器组件
+
+3、利于团队协作，一个人负责界面结构，一个人负责数据交互
+
+#### 缺陷
+
