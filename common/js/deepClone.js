@@ -57,6 +57,17 @@ function cloneOtherType(targe, type) {
       return null
   }
 }
+// 克隆Symbol
+function cloneSymbol(targe) {
+  return Object(Symbol.prototype.valueOf.call(targe))
+}
+// 克隆正则
+function cloneReg(targe) {
+  const reFlags = /\w*$/
+  const result = new targe.constructor(targe.source, reFlags.exec(targe))
+  result.lastIndex = targe.lastIndex
+  return result
+}
 function deepClone(value, map=new WeakMap()) {
   let cloneValue, type
   // 判断引用数据类型
