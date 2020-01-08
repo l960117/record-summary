@@ -221,3 +221,64 @@ button.addEventListener('click', () => {
 ### Symbol
 ES6 引入了一种新的原始数据类型Symbol，表示独一无二的值。
 
+#### 特性
+1、无法用new进行显式定义
+```js
+let a = Symbol()
+let b = new Symbol() // 报错
+```
+2、typeOf返回的值为Symbol
+```js
+var sym = Symbol('foo')
+typeof sym    // 'symbol'
+```
+
+3、symbol属性是不可枚举的
+symbol不会在for循环、for(...in...)中出现，因为这个属性是匿名的
+```js
+let temp = {
+    [Symbol('people')]: 'symbol类型',
+    id: 123,
+    des: '定义类型'
+}
+
+for (let prop in temp ) {   
+    console.log(prop)   // 分别会输出：'id' 和 'des'
+}
+```
+Object.getOwnPropertySymbols()该方法可以返回一个包含所有Symbol自有属性的数组
+```js
+let temp = {    
+    [Symbol('people')]: 'symbol类型',    
+    id: 123,    
+    des: '定义类型'
+}
+Object.getOwnPropertySymbols(temp) // [Symbol(people)]
+```
+Object.keys()和Object.getOwnPropertyNames()方法可以检索对象中所有的属性名,前一个方法返回所有的可枚举属性名.后一个方法不考虑属性的可枚举性一律返回,但都不能返回symbol属性
+```js
+Object.keys(temp )   // ['id', 'des']
+Object.getOwnPropertyNames(obj)   // ['id', 'des']
+```
+4、定义两个相同的Symbol数据是不相等的
+如果要创建就一个共享的Symbol需要用到Symbol.for()方法.
+Symbol.for()方法首先在全局Symbol注册表中搜索键为‘uid’的Symbol是否存在，如果存在，直接返回已有的Symbol；否则，创建一个新的Symbol，并使用这个键在Symbol全局注册表中注册，随机返回新创建的Symbol。
+
+```js
+let a = Symbol('AAA')
+let b = Symbol('AAA')    
+console.log(a === b) // false
+    
+let c = Symbol.for('uid')
+let d = Symbol.for('uid')
+    
+console.log(c === d) // true
+```
+Symbol.keyFor
+Symbol.keyFor(sym)，它的作用完全反过来：通过全局 Symbol 返回一个名字。
+Symbol.keyFor 内部使用全局 Symbol 注册表来查找 Symbol 的键。所以它不适用于非全局 Symbol。如果 Symbol 不是全局的，它将无法找到它并返回 undefined。
+5、使用JSON.stringify()时，以symbol值作为键的属性会被忽略
+JSON.stringify({[Symbol('foo')]: 'foo'});                 
+// '{}'
+
+
