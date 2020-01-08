@@ -220,3 +220,4 @@ button.addEventListener('click', () => {
 
 ### Symbol
 ES6 引入了一种新的原始数据类型Symbol，表示独一无二的值。
+
