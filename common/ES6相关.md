@@ -1,14 +1,11 @@
-### var和let/const的区别
+### var、let、const
 背景：
 ES5只有全局作用域和函数作用域，没有块级作用域。
 
-这带来很多不合理的场景:
-
-内层变量可能覆盖外层变量
-用来计数的循环变量泄露为全局变量
-
 let、const使用场景:
+
 let使用场景：变量，用以替代var。
+
 const使用场景：常量、声明匿名函数、箭头函数的时候。
 
 #### 块级作用域
@@ -25,19 +22,26 @@ function f1() {
 ```
 ```js
 {{{{
-  {let insane = 'Hello World'}
-  console.log(insane); // 报错 读不到子作用域的变量
+  {let name = 'UUZ'}
+  console.log(name); // 报错 读不到子作用域的变量
 }}}};
 ```
 ```js
-{
-let a = ...;
-...
+var a = [];
+for (var i = 0; i < 10; i++) {
+  a[i] = function () {
+    console.log(i);
+  };
 }
-{
-let a = ...;
-...
+a[6](); // 10
+
+var a = [];
+for (let i = 0; i < 10; i++) {
+  a[i] = function () {
+    console.log(i);
+  };
 }
+a[6](); // 6
 ```
 
 #### 不存在变量提升
@@ -57,12 +61,17 @@ sayHi()
 ```js
 var tmp = 123; // 声明
 if (true) {
-  tmp = 'abc'; // 报错 因为本区域有tmp声明变量
+  tmp = 'UUZ'; // 报错 因为本区域有tmp声明变量
   let tmp; // 绑定if这个块级的作用域 不能出现tmp变量
 }
 ```
-
+```js
+typeof xxx // xxx未声明，返回undefined
+```
+在没有let之前，typeof运算符是百分之百安全的，永远不会报错。
 #### 不可重复声明
+
+let不允许在相同作用域内，重复声明同一个变量。
 
 #### let、const声明的全局变量不会挂在顶层对象下面
 
@@ -70,12 +79,10 @@ if (true) {
 
 2、node环境顶层对象是: global
 
-3、var声明的全局变量会挂在顶层对象下面，而let、const不会挂在顶层对象下面。如下面这个栗子
+3、var声明的全局变量会挂在顶层对象下面，而let、const不会挂在顶层对象下面。如下面
 
 ```js
 var a = 1;
-// 如果在 Node环境，可以写成 global.a
-// 或者采用通用方法，写成 this.a
 window.a // 1
 
 let b = 1;
