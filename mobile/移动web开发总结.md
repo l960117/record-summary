@@ -56,23 +56,23 @@ img：html中的标签img是网页结构的一部分会在加载结构的过程�
 background：以css背景图存在的图片background会等到结构加载完成（网页的内容全部显示以后）才开始加载
 也就是说，网页会先加载标签img的内容，再加载背景图片background引用的图片。
 引入一张图片，那么在这个图片加载完成之前，img后的内容不会显示。而用background来引入同样的图片，网页结构和内容加载完成之后，才开始加载背景图片，网页内容能正常浏览，但是看不到背景图片。至于这两种，大家按照习惯，需求等权重因素选择！
-### 7.快速回弹滚动
+## 7.快速回弹滚动
 在ios上，如果存在局部滚动，就要加这个属性了！如果不加，滚动会很慢，看起来也会有一卡一卡的感觉。
 ```
 -webkit-overflow-scrolling: touch;
 ```
 但是，加上了这个，在ios上会产生bug。(慎用)
-### 8.谨慎使用fixed
+## 8.谨慎使用fixed
 ios下fixed元素容易定位出错，软键盘弹出时，影响fixed元素定位，会发生元素错位（滚动一下又恢复），有时候会出现闪屏的效果.
 所以在手机上，不建议用fixed定位，使用absolute代替！如果一定要用，写好了之后，一定要多测试几次！
-### 9.消除transition闪屏
-### 10.ios系统中去掉元素被触摸时产生的半透明灰色遮罩
+## 9.消除transition闪屏
+## 10.ios系统中去掉元素被触摸时产生的半透明灰色遮罩
 ```css
 a,button,input,textarea{-webkit-tap-highlight-color: rgba(0,0,0,0;)}
 ```
-### 11.ios中去掉默认input默认样式
+## 11.ios中去掉默认input默认样式
 ```css
 input,button,textarea{-webkit-appearance: none;}
 ```
-### 12.左右滑动，避免页面跟着滑动(暂未解决)
+## 12.左右滑动，避免页面跟着滑动(暂未解决)
 根据touchstart和touchend的移动距离来判断是左右滑动或者上下滑动！
