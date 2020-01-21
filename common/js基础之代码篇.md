@@ -25,26 +25,58 @@ function throtte(func, time){
 }
 ```
 #### 柯里化
-
+简单说就是把多形参的函数转换为可以一个一个接收参数的函数,即如下
 ```js
-function curry(fn: any) {
-  return function judgeCurry(...args: any) {
-      return fn.length > args.length ? 
-          (...args1: any) => judgeCurry(...args,...args1):
-          fn(...args);
+add(x,y) => curryAdd(x)(y)
+```
+```js
+function curry(f){
+  var total = f.length
+  var args = []
+  return function() {
+    args.push(...arguments)
+    if (args.length < total) {
+      return arguments.callee
+    } else {
+      var res = f.apply(this, args)
+      args = [] // 需要清理args
+      return res
+    }
   }
 }
+
+function add(x,y) {
+  return x+y
+}
+
+var curryAdd=curry(add)
+
+curryAdd(1)(2) // 3
+curryAdd(1,2) 
 ```
 #### 函数组合
-
+组合函数指的是将代表各个动作的多个函数合并成一个函数
 ```js
-function compose(...args: any[]) {
-  return (subArgs: any) => {
-    return args.reverse().reduce((acc, func,index) => {
-      return func(acc);
-    }, subArgs);
+function componse(...funcs) {
+  return function() {
+    var result = funcs[0].apply(this, arguments)
+    for (var i = 1; i < funcs.length; i++) {
+      result = funcs[i].call(this, result)
+    }
+    return result
   }
 }
+
+function f1(x) {
+  return x + 1
+}
+
+function f2(x) {
+  return x * 2
+}
+
+var f = componse(f1, f2)
+f(1) // 4
 ```
 
 #### 深拷贝
@@ -171,12 +203,12 @@ export default deepClone
 ```
 
 #### new
-1、首先创建一个空的对象，空对象的__proto__属性指向构造函数的原型对象
-
-2、把上面创建的空对象赋值构造函数内部的this，用构造函数内部的方法修改空对象
-
-3、如果构造函数返回一个非基本类型的值，则返回这个值，否则上面创建的对象
-
+```js
+1. 创建一个全新的对象。
+2. 这个新对象会被执行 [[Prototype]] 连接。
+3. 这个新对象会绑定到函数调用的 this。
+4. 如果函数没有返回其他对象，那么 new 表达式中的函数调用会自动返回这个新对象。
+```
 ```js
 function _new(fn, ...arg) {
   const obj = Object.create(fn.prototype);
@@ -204,5 +236,44 @@ function fmoney(num: number){
   }, '').slice(0, -1);
   return `${IntStr}${arr[1]? '.'+arr[1] : '' }`;
 }
+```
+
+#### 数组扁平化
+递归
+```js
+function flat (arr, results = []) {
+  arr.forEach((item, index) => {
+    if (item instanceof Array) {
+      flat(item, reuslts)
+    } else {
+      results.push(item)
+    }
+  })
+  return results
+}
+```
+```js
+var arr = [1, [[2, 3], 4], [5, 6]];
+
+var flat = function* (a) {
+  var length = a.length;
+  for (var i = 0; i < length; i++) {
+    var item = a[i];
+    if (typeof item !== 'number') {
+      yield* flat(item);
+    } else {
+      yield item;
+    }
+  }
+};
+
+for (var f of flat(arr)) {
+  console.log(f);
+}
+// 1, 2, 3, 4, 5, 6
+```
+ES6
+```js
+[1, [1,2]].flat(Infinity)
 ```
 
