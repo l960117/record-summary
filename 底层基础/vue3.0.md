@@ -1,11 +1,6 @@
-#### Vue3 比 Vue2有什么优势
+#### Vue3 对比 Vue2有什么优势
 ```js
-1、性能更好
-2、体积更小
-3、更好的ts支持
-4、更好的代码组织
-5、更好的逻辑抽离
-6、更多新功能
+性能更好、体积更小、更好的ts支持、更好的代码组织、更好的逻辑抽离、更多新功能
 ```
 #### Vue3生命周期
 ```js
@@ -21,7 +16,7 @@ Composition Api 适用于大型复杂应用，是为解决浮渣业务逻辑而�
 2、更好的逻辑复用
 3、更好的类型推导
 ```
-不建议公用，会引起混乱、小型项目，逻辑简单实用Options Api、中大型项目，逻辑复杂用Composition Api（高阶技巧）
+不建议两个一起使用，会引起混乱、小型项目，逻辑简单实用Options Api、中大型项目，逻辑复杂用Composition Api
 
 #### 如何理解ref toref 和 toRefs
 使用ref的原因
@@ -81,12 +76,11 @@ createApp({
 reactive、ref相关、readonly、watch 和 watchEffect、setup、生命周期钩子函数
 ```
 #### Composition API实现逻辑复用
+```js
 1、抽离逻辑到一个函数
-
 2、函数命名约定为useXXX格式
-
 3、在setup使用这个函数
-
+```
 #### Proxy函数
 ```js
 const proxyData = new Proxy(data, {
@@ -94,7 +88,6 @@ const proxyData = new Proxy(data, {
         // 只处理本身（非原型的）属性
         const ownKeys = Reflect.ownKeys(target)
         if (ownKeys.includes(key)) {
-            //
         }
         const result = Reflect.get(target, key, receiver)
         return result
@@ -134,7 +127,6 @@ function reactive(target = {}) {
     if (typeof target !== 'object' || target == null) {
         return target
     }
-
     const proxyConf = {
         get(target, key, receiver) {
             // 只处理本身（非原型的）属性
@@ -156,11 +148,8 @@ function reactive(target = {}) {
             // 判断是否新增属性
             const ownKeys = Reflect.ownKeys(target)
             if (ownKeys.includes(key)) {
-                //
             } else {
-
             }
-
             const result = Reflect.set(target, key, vakl, receiver)
             return result
         },
@@ -182,7 +171,6 @@ function reactive(target = {}) {
 ```
 #### v-model参数 (双向绑定效果)
 类似vue2 .async
-
 #### watch 和 watchEffect的区别
 ```js
 1、两者都可监听data属性变化
@@ -223,7 +211,7 @@ watchEffect(() => {
 2、可通过getCurrentInstance获取当前实例
 3、若使用Options API 可使用this
 ```
-#### Vue3 为何比Vue2快
+#### Vue3 为何比 Vue2快
 ```js
 1、Proxy响应式
 2、PatchFlag
@@ -236,7 +224,7 @@ diff算法时，可以区分静态节点，以及不同类型的动态节点
 典型的拿空间换时间的优化策略
 4、cacheHandler
 缓存事件
-5、SSr优化
+5、SSR优化
 静态节点直接输出，绕过了vdom
 动态节点，还是需要动态渲染
 6、tree-shaking
@@ -244,11 +232,13 @@ diff算法时，可以区分静态节点，以及不同类型的动态节点
 ```
 
 #### Vite
+```js
 1、一个全段打包工具，Vue作者发起的项目
 2、借助Vue的影响力，发展较快和webpack竞争
 3、优势：开发环境下无需打包，启动快
-
+```
 启动快的原因
+
 1、开发环境使用ES Module，无需打包，非常快
 
 2、生产环境使用rollup，并不会快很多
@@ -260,4 +250,3 @@ diff算法时，可以区分静态节点，以及不同类型的动态节点
 3、前者无需顾虑调用书按需，而后者需要保证hooks的顺序一致
 4、前者reactive + ref比后者useState要难理解
 ```
-
