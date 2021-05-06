@@ -1,3 +1,4 @@
+### 基本使用
 #### React事件和Dom事件的区别
 1、event 是SyntheticEvent，模拟出来Dom事件所有能力
 
@@ -27,7 +28,7 @@ props类型检查
 1、不可变值：不能直接去操作state
 2、可能是异步更新
 ```js
-1、
+1、直接使用时异步的，可使用setState的第二个参数，回调函数
 2、setTimeout 中setState是同步的
 setTimeout(() => {
     this.setState({
@@ -44,3 +45,62 @@ document.body.addEventListener('click', () => {
 })
 ```
 3、可能会被合并
+```js
+1、传入对象，会被合并，执行结果只一次 + 1（类似Object.assign）
+this.setState({
+    count: this.state.count + 1
+})
+this.setState({
+    count: this.state.count + 1
+})
+this.setState({
+    count: this.state.count + 1
+})
+2、传入函数，不会被合并，执行结果 + 3
+this.setState((pervState, props) => {
+    return {
+        count: prevState.count + 1
+    }
+})
+this.setState((pervState, props) => {
+    return {
+        count: prevState.count + 1
+    }
+})
+this.setState((pervState, props) => {
+    return {
+        count: prevState.count + 1
+    }
+})
+```
+#### 组件生命周期
+1、挂载时
+```js
+constructor
+componentWillMount
+componentDidMount
+```
+2、更新时
+```js
+shouldCompontntUpdate
+componentDidUpdate
+```
+3、卸载时
+```js
+componentWillUnmount
+componentDidUnmount
+```
+### 高级特性
+#### 函数组件
+```js
+1、纯函数，输入props，输出JSX
+2、没有实例，没有生命周期，没有state
+3、不能扩展其他方法
+```
+#### 非受控组件
+#### Pprtals
+#### context
+#### 异步组件
+#### 性能优化
+#### 高阶组件HOC
+#### Render Props
