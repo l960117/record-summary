@@ -26,6 +26,7 @@ React 组件更易用函数表达
 
 useEffect 让纯函数有了副作用
 默认情况下，执行纯函数，输入参数，返回结果，无副作用
+
 所谓副作用，就是对函数之外造成影响，如设置全局定时任务
 而组件需要副作用，所以需要useEffect“钩”入纯函数中
 
@@ -40,6 +41,11 @@ useEffect(() => {
 })
 ```
 #### useRef useContext
+```js
+const domRef = useRef()
+
+const themeContext = useContext(XXX)
+```
 #### useReducer
 ```js
 import React, { useReducer } from 'react'

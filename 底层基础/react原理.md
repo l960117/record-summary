@@ -4,12 +4,13 @@
 2、不可变值
 #### vdom 和 diff
 #### JSX本质
-JSX等同于Vue模板、但是JSX不是JS
+JSX不是JS
 
 本质：
 ```js
-React.createElement 即h函数，返回vdom
+React.createElement 相当于h函数，返回vdom
 第一个参数，可能是组件，也可能是html tag
+children参数可以是数组，也可以是后面不确定参数
 组件名，首字母必须大写（React规定）
 ```
 #### 合成事件
@@ -22,7 +23,7 @@ DOM -----> 合成事件层（实例化统一的react event），dispatchEvent --
 使用合成事件机制好处
 ```js
 1、更好的兼容性和跨平台
-2、载到document或root，减少内存消耗，毕淼频繁解绑
+2、载到document或root，减少内存消耗，避免频繁解绑
 3、方便事件的统一管理（如事务机制）
 ```
 #### setState batchUpdate
@@ -76,7 +77,7 @@ reconciliation 阶段 - 执行diff算法，纯JS计算
 commit阶段 - 将diff结果渲染DOM
 ```
 可能会有性能问题：
-···js
+```js
 JS是单线程，且和DOM渲染共用一个线程
 当组件足够复杂，组件更新时计算和渲染都压力大
 同时再有DOM操作需求（动画，鼠标拖拽等），将卡顿
@@ -87,6 +88,9 @@ JS是单线程，且和DOM渲染共用一个线程
 DOM需要渲染时暂停，空闲时恢复
 window.requestIdleCallback
 ```
+
+
+
 React 真题
 #### 组件之间如何通讯
 1、父子组件props
@@ -119,12 +123,14 @@ createElement
 #### PureComponent有何区别
 #### React事件和DOM事件的区别
 #### React性能优化
-渲染列表加key
-自定义事件、DOm事件及时销毁
-合理使用异步组件
-减少函数bind this的次数
-合理使用SCU PureComponent 和memo
-合理使用不可变值
+```js
+1、渲染列表加key
+2、自定义事件、DOM事件及时销毁
+3、合理使用异步组件
+4、减少函数bind this的次数
+5、合理使用shouldComponentUpdate PureComponent 和memo
+6、合理使用不可变值
+```
 #### React和Vue的区别
 都支持组件化
 都是数据驱动视图
