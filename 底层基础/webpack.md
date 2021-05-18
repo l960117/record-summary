@@ -110,7 +110,7 @@ vue-loader
 3、bundle - 最终的输出文件
 ```
 ###  优化打包构建效率（开发体验和效率）
-1、优化babel-loader
+#### 1、优化babel-loader
 ```js
 {
     test: /\.js$/,
@@ -120,7 +120,7 @@ vue-loader
     // exclude: path.resolve(__dirname, 'node_modules')
 }
 ```
-2、IgnorePlugin（可用于生产环境）
+#### 2、IgnorePlugin（可用于生产环境）
 
 避免引入无用模块
 ```js
@@ -133,7 +133,7 @@ new webpack.IgnorePlugin(/\.\/locale/, /moment/)
 ```
 然后手动引入需要的语言包
 
-3、noParse（可用于生产环境）
+#### 3、noParse（可用于生产环境）
 
 避免重复打包
 ```js
@@ -147,7 +147,7 @@ module: {
 IgnorePlugin 直接不引入，代码中没有
 noParse引入，但不打包
 ```
-4、happyPack 多进程打包（可用于生产环境）
+#### 4、happyPack 多进程打包（可用于生产环境）
 
 JS单线程，开启多进程打包
 
@@ -169,7 +169,7 @@ plugins: {
     })
 }
 ```
-5、ParallelUglifyPlugin 多进程压缩JS（可用于生产环境）
+#### 5、ParallelUglifyPlugin 多进程压缩JS（可用于生产环境）
 
 webpack内置UglifyJS工具压缩
 
@@ -184,7 +184,7 @@ webpack内置UglifyJS工具压缩
 按需使用
 ```
 
-6、自动刷新（不可用于生产环境）
+#### 6、自动刷新（不可用于生产环境）
 
 整个网页全部刷新，速度较慢、状态会丢失
 ```js
@@ -197,11 +197,11 @@ module.export = {
     }
 }
 ```
-7、热更新（不可用于生产环境）
+#### 7、热更新（不可用于生产环境）
 
 新代码生效，网页不刷新，状态不丢失
 
-8、DllPlugin 动态链接库插件（不可用于生产环境）
+#### 8、DllPlugin 动态链接库插件（不可用于生产环境）
 ```js
 前端框架如Vue React，体积大，构建慢
 较稳定，不常升级版本
