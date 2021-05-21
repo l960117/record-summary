@@ -372,9 +372,42 @@ rm -rf abc 删除文件夹
 mv xxx 移动更改文件
 cp xxx xxx 拷贝
 #### 运行环境
+##### 资源的形式
+1、html代码
+2、媒体文件，如图片，视频
+3、javascript css
+##### 加载过程
+DNS解析：域名 -> IP地址
+浏览器根据IO地址像服务器发起http请求
+服务器处理http请求，并返回给浏览器
+##### 渲染过程
+根据html代码生成DOM Tree
+根据CSS代码生成CSSOM
+将DOM Tree和CSSOM整合形成Render Tree
+根据Render Tree渲染页面
+遇到<script>则暂停渲染，有限加载并执行JS代码，完成再继续
+直至把Render Tree渲染完成
 
+##### window.onloal 和 DOMContentLoaded的区别
+window.onload资源全部加载完才能执行，包括图片
+DOMContentLoaded DOM渲染完成即可，图片可能尚未下载
+##### 性能优化
+原则：
+多使用内存，缓存或其他方法
+减少CPU计算量，减少网络加载耗时
 
+让加载更快
+减少资源体积：压缩代码
+减少访问次数：合并代码，SSR服务端渲染，缓存
+使用更快的网络：CDN
 
+让渲染更快
+CSS放在head，JS放在body
+尽早开始执行JS，用DOMContentLoaded触发
+懒加载（图片懒加载，上滑加载更多）
+对DOM查询进行缓存
+频繁操作DOM，合并到一起插入DOM结构
+节流和防抖
 
 
 
