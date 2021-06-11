@@ -1,5 +1,5 @@
 #### 变量类型和计算
-##### 值类型
+##### 基本数据类型
 number、string、boolean、null、undefined、symbol、bigInt
 ##### 引用类型
 object
@@ -17,14 +17,14 @@ typeof 对于对象来说，除了函数都会显示 object
 ##### class
 语法糖，实际上是函数
 ##### 显示原型和隐式原型
-protetype 显示原型、__protp__ 隐式原型
+protetype 显示原型、__proto__ 隐式原型
 
 每个class都有显示原型prototype
 每个实例都有隐式原型__proto__
 实例的__proto__指向对应的class的prototype
 
 基于原型的执行规则
-1、现在自身属性和方法寻找
+1、先在自身属性和方法寻找
 2、如果找不到则自动去__proto__查找
 ##### 原型链
 通过隐式原型一层一层网上找直到对应的__proto__为null为止
@@ -105,7 +105,7 @@ print(fn) // 100
 2、如果某一行报错，则停止下面代码的执行
 3、先把同步代码执行完，在执行异步
 ##### event loop执行过程
-1、同步代码，一行一行放在Call Stacj执行
+1、同步代码，一行一行放在Call Stack执行
 2、遇到异步，会先“记录”下，等待时机（定时，网络请求）
 3、时机到了，就移动到Callback Queue
 4、如果Call Stack 为空（即同步代码执行完）Event Loop开始工作
@@ -143,7 +143,8 @@ async/await只是一个语法糖，实现了代码上的同步，本质上还是
 
 await的后面，都可以看做是callback里的内容，即异步
 ##### for...of
-for in 以及firEach for 是常规的同步遍历
+for in 以及for
+forEach for 是常规的同步遍历
 
 for of常用于异步的遍历
 ##### 宏任务和微任务，两者有什么区别
@@ -165,7 +166,7 @@ event loop 和DOM渲染
 
 区别：
 宏任务：DOM渲染后触发，如setTimeout
-微任务：DOM渲染钱触发，如Promise
+微任务：DOM渲染前触发，如Promise
 #### JS Web API
 1、JS基础知道，规定语法（ECMA 262标准）
 2、JS Web API，网页操作的API（W3C标准）
@@ -173,7 +174,7 @@ event loop 和DOM渲染
 ##### DOM（Document Object Model）
 本质：从HTML解析出来的一棵树
 API：
-1、property：修改对象竖向，不会体现到html结构中
+1、property：修改对象属性，不会体现到html结构中
 2、attribute：修改html属性，会改变html结构
 3、两者都有可能引起DOM重新渲染
 DOM结构操作
@@ -337,11 +338,11 @@ Last-Modified只能精确到秒级
 ```
 手动刷新：F5, 点击刷新按钮，右键菜单刷新
 ```js
-强制缓存失效，协商缓存失效
+强制缓存失效，协商缓存有效
 ```
 强制刷新: ctrl + f5
 ```js
-强制缓存师表，协商缓存失效
+强制缓存失效，协商缓存失效
 ```
 #### 开发环境
 ##### git
@@ -378,7 +379,7 @@ cp xxx xxx 拷贝
 3、javascript css
 ##### 加载过程
 DNS解析：域名 -> IP地址
-浏览器根据IO地址像服务器发起http请求
+浏览器根据IP地址向服务器发起http请求
 服务器处理http请求，并返回给浏览器
 ##### 渲染过程
 根据html代码生成DOM Tree
@@ -408,6 +409,15 @@ CSS放在head，JS放在body
 对DOM查询进行缓存
 频繁操作DOM，合并到一起插入DOM结构
 节流和防抖
+
+熟练使用ES6+、TS开发，有扎实的js基础
+
+熟练搭建react、vue单页面开发，能够封装通用组件，进行组件的二次封装
+
+能够独立负责项目开发迭代，可以带领小伙伴一起成长
+
+
+
 
 
 
