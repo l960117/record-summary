@@ -30,7 +30,7 @@ display是flex inline-block
 手写clearfix
 ```js
 .clearfix:after {
-    content: '';
+    content: '';-
     display: table;
     clear: both;
 }
