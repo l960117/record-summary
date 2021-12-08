@@ -185,5 +185,111 @@ createViteServer({
 
 ## 配置总览
 
+## rollup
+
+## Vite插件系统
+受限制的rollup插件
+
+命名： rollup-plugin-xxx   vite-plugin-xxx
+
+兼容钩子
+服务启动时
+1、options
+2、buildStart
+每个模块
+1、resolveId
+2、load
+3、transform
+服务关闭时
+1、buildEnd
+2、closeBoundle
+
+modulePased不会被调用，都是交给esBuild来操作
+
+rollup插件兼容vite条件
+1、没有时间moduleParsed钩子
+2、它在打包钩子和输出钩子之间没有很强的耦合
+
+vite独有的钩子
+1、config
+可修改config， 返回体会与config合并
+```js
+config(userConfig) {
+  return {
+    resolve: {
+      alias: {
+        '@aaa': '/src/styles'
+      }
+    }
+  }
+}
+```
+2、configResolved
+读取config，不可修改
+```js
+configResolved(config) {
+  console.log(config)
+}
+```
+3、configureServer
+获取server对象，可加入vite server中间件
+```js
+configureServer(server) {
+  server.middelwres.user((req, res, next) => {
+    if (req.url === '/test') {
+      res.end('Hello Vite Plugin')
+    } else {
+      next()
+    }
+  })
+}
+
+// return 一个函数， 中间件的优先级最低
+configureServer(server) {
+  return () => {
+    server.middelwres.user((req, res, next) => {
+      if (req.url === '/test') {
+        res.end('Hello Vite Plugin')
+      } else {
+        next()
+      }
+    })
+  }
+}
+```
+4、transformIndexHtml
+```js
+transformIndexHtml(html) {
+  // 拿到的是index.html的内容
+  return html // 可以替换内容
+}
+```
+5、handleHotUpdate 处理热更新做一些特殊处理
+```js
+handleHotUpdate(ctx) {
+  console.log(ctx) // 热更新的模块信息以及文件
+  ctx.server.ws.send({ // 自定义事件，可以在客户端监听
+    type: 'custom',
+    event: 'test',
+    data: {
+      a: 'res'
+    }
+  })
+}
+
+// 客户端代码监听
+if (import.meta.hot) {
+  import.meta.hot.on('test', res => {
+    console.log(res)
+  })
+}
+```
+vite插件执行时机
+1、pre
+2、normal
+3、post
+
+## HRM-API详解
+
 
 
