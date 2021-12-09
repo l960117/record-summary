@@ -290,6 +290,42 @@ vite插件执行时机
 3、post
 
 ## HRM-API详解
+```js
+if (import.meta.hot) {
+  // 接受当前模块或者指定模块热更新
+  import.meta.hot.accept((newModule) => {
+    newModule.render()
+  })
+  // 指定热更新文件
+  import.meta.hot.accept(['./renderA'])
+  // 强制热更新之后刷新页面
+  import.meta.hot.decline()
+  // 强制浏览器刷新
+  import.meta.hot.invalidate()
+}
+// 清楚副作用
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    // 卸载时清楚热更新的副作用
+    // 例：定时器
+  })
+}
+// 数据缓存
+let index = import.meta.hot.data.cache.getIndex ? import.meta.hot.data.cache.getIndex : 0
+if (import.meta.hot) {
+  import.meta,hot.data.cache = {
+    getIndex() {
+      return index
+    }
+  }
+  import.meta.hot.dispose(() => {
+    // 卸载时清除热更新的副作用
+    // 例：定时器
+  })
+}
+```
+
+## Vite官方插件
 
 
 
