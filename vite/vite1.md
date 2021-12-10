@@ -296,19 +296,17 @@ if (import.meta.hot) {
   import.meta.hot.accept((newModule) => {
     newModule.render()
   })
+  // 清除副作用
+  import.meta.hot.dispose(() => {
+    // 卸载时清楚热更新的副作用
+    // 例：定时器
+  })
   // 指定热更新文件
   import.meta.hot.accept(['./renderA'])
   // 强制热更新之后刷新页面
   import.meta.hot.decline()
   // 强制浏览器刷新
   import.meta.hot.invalidate()
-}
-// 清楚副作用
-if (import.meta.hot) {
-  import.meta.hot.dispose(() => {
-    // 卸载时清楚热更新的副作用
-    // 例：定时器
-  })
 }
 // 数据缓存
 let index = import.meta.hot.data.cache.getIndex ? import.meta.hot.data.cache.getIndex : 0
